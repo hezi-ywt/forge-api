@@ -50,3 +50,10 @@ metadata.
 
 The bundled Skill is at `skills/forge-api/SKILL.md`; its references and
 Skill-specific scripts are colocated under that directory.
+
+## GitHub mirror
+
+The workflow at `.github/workflows/mirror-from-gitlab.yml` mirrors this
+repository from the matching GitLab project every day at 02:17 UTC and can
+also be started manually. Add a GitLab token with `read_repository` scope as
+the `GITLAB_TOKEN` Actions secret in the GitHub repository before enabling it.
