@@ -1,0 +1,27 @@
+name: Mirror from GitLab
+
+on:
+  schedule:
+    - cron: "17 2 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  mirror:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Mirror the GitLab repository
+        env:
+          GITLAB_TOKEN: ${{ secrets.GITLAB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          test -n "$GITLAB_TOKEN"
+          git -c http.extraheader="PRIVATE-TOKEN: ${GITLAB_TOKEN}" \
+            clone --mirror "https://git.qingchunyu.top/${GITHUB_REPOSITORY}.git" mirror.git
+          cd mirror.git
+          git remote set-url --push origin \
+            "https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
+          git push --mirror
